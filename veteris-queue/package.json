@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "kue": "^0.11.5"
+    "kue": "^0.11.5",
+    "node-metainspector": "^1.3.0",
+    "parse-domain": "^1.1.0",
+    "request": "^2.81.0",
+    "unfluff": "^1.1.0"
   }
 }
