@@ -21,32 +21,19 @@ queue.on('error', (err) => {
 });
 
 
-
 queue.process('addWebpage', 20, (job, done) => {  
- 
   var client = new metaInspector(job.data.name, { timeout: 5000 });
 
   client.on("fetch", function(){
       var parseUrl = parseDomain(job.data.name);
 
-       console.log(job.data.name);
       var unfluff = extractor(job.data.name,"en");
 
       request(job.data.name, function (error, response, body) {
-       var unfluff =  extractor(body,"en");
-
-       console.log(unfluff);
-
-       var parseWebpage = extract(client, parseUrl, unfluff);
-
-       done(null, parseWebpage);
+        var unfluff =  extractor(body,"en");
+        var parseWebpage = extract(client, parseUrl, unfluff);
+        done(null, {webpage: parseWebpage, user: job.data.user});
       });
-
-      
-      
-
-      
-
   });
 
   client.on("error", function(err){
@@ -54,7 +41,6 @@ queue.process('addWebpage', 20, (job, done) => {
   });
 
   client.fetch();  
-
   
 });
 

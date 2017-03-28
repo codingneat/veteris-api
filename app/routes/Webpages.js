@@ -4,14 +4,13 @@ const express	= require('express')
 const router	= express.Router()
 const _ = require('lodash')
 const Webpage 	= require('../models/webpage')
+const webpageService 	= require('../services/webpage')
 const kue = require('kue')
 const queue = kue.createQueue()
-
+const sockets = require('../../config/initializers/sockets');
 
 // Create 
 router.post('/', function (req, res, next) {
-
-  console.log("begin");
 
   if(req.body.name !== "undefined"){
 
@@ -22,39 +21,18 @@ router.post('/', function (req, res, next) {
 
 
       job.on('complete', function(result){
-        let webpage = new Webpage()
-
-        let meta = {
-            titles : [result.meta.title, result.extract.title, result.extract.softTitle],
-            authors: [result.meta.author, result.extract.author],
-            descriptions : [result.meta.description, result.extract.description],
-            images : [result.meta.image, result.extract.image],
-            tags : result.extract.tags,
-            charset: result.meta.charset,
-            canonicalLink: result.extract.canonicalLink,
-            lang: result.extract.lang,
-            publisher: result.extract.publisher,
-            copyright: result.extract.copyright,
-            url: {
-              scheme: result.meta.scheme,
-              tld: result.parseUrl.tld,
-              domain: result.parseUrl.domain,
-              subdomain: result.parseUrl.subdomain
-            }
-        }
-
-        webpage.title = result.extract.title;
-        webpage.author = result.extract.author;
-        webpage.description = result.extract.description;
-        webpage.image = result.extract.image; 
-        webpage.url = result.meta.url;
-        //webpage.user = req.decoded._id;
-        webpage.meta = meta;
+        let webpage = webpageService.fillWebpage(result.webpage, result.user);
 
         webpage.save(function (err) {
           if (err) return next(err)
 
-        })
+          _.forEach(req.io.sockets.connected, function(sock) {
+            if(_.indexOf(sockets[result.user],sock.id)!==-1){
+              sock.emit('savingWebpage', webpage._id);
+            }
+          })
+        });              
+
 
       }).on('failed attempt', function(errorMessage, doneAttempts){
         console.log('Job failed');

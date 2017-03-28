@@ -9,19 +9,11 @@ var sockets = require('../../config/initializers/sockets');
 // List Tags
 router.get('/', function (req, res, next) {
   			 var io = req.io;
-				 var y = 0;var i = 0;
 
 				_.forEach(io.sockets.connected, function(sock) {
-
-console.log(sockets);
 					if(_.indexOf(sockets[req.decoded._id],sock.id)!==-1){
 						sock.emit('newTweet', 'test');
-						y++;
-            console.log(sock.id);
-						console.log('y = '+ y);
 					}
-					i++;
-
 				});     
   Tag.find().select('_id id name').sort({'_id': -1}).exec(function (err, tags) {
     if (err) return next(err)
