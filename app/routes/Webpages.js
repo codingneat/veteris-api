@@ -56,5 +56,16 @@ router.post('/', function (req, res, next) {
 
 })
 
+// Find One 
+router.get('/findOne/:id', function (req, res, next) {
+  console.log(req.params.id);
+
+  Webpage.findOne({ '_id': req.params.id }).exec(function (err, webpage) {
+    if (err) return next(err)
+
+    return res.json(webpage)
+  })
+})
+
 
 module.exports = router
