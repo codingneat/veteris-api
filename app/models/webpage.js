@@ -19,10 +19,6 @@ var webpageSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now },
   updated_at: Date,
   meta: {
-      titles : [String],
-      authors: [String],
-      descriptions : [String],
-      images : [String],
       tags : [String],
       charset: {type: String},
       canonicalLink: {type: String},

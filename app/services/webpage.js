@@ -6,10 +6,6 @@ module.exports = {
       let webpage = new Webpage()
 
 	    let meta = {
-            titles : [result.meta.title, result.extract.title, result.extract.softTitle],
-            authors: [result.meta.author, result.extract.author],
-            descriptions : [result.meta.description, result.extract.description],
-            images : [result.meta.image, result.extract.image],
             tags : result.extract.tags,
             charset: result.meta.charset,
             canonicalLink: result.extract.canonicalLink,
@@ -25,10 +21,10 @@ module.exports = {
         }
 
         webpage.title = result.extract.title;
-        webpage.author = result.extract.author;
-        webpage.description = result.extract.description;
-        webpage.image = result.extract.image; 
-        webpage.url = result.meta.url;
+        webpage.author = (result.extract.author != null && result.extract.author != undefined) ? result.extract.author : "";
+        webpage.description = (result.extract.description != null && result.extract.description != undefined) ? result.extract.description : "";
+        webpage.image = (result.extract.image != null && result.extract.image != undefined) ? result.extract.image : ""; 
+        webpage.url =  (result.meta.url != null && result.meta.url != undefined) ? result.meta.url : "";
         webpage.user = user;
         webpage.meta = meta;
 
