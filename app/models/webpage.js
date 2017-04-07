@@ -16,6 +16,8 @@ var webpageSchema = new mongoose.Schema({
   isUp : { type: Boolean, default: true },
   type: { type: String, required: true, enums: ['Article','Repository','Tutorial','Video'], default: 'Article'},
   status: {type: String, required: true, enum: ['Active', 'ToDefine', 'Outdated', 'Deprecated'], default: 'Active'},
+  pertinence: [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, points: Number}],
+  comments: [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, text: String}],
   created_at: { type: Date, default: Date.now },
   updated_at: Date,
   meta: {

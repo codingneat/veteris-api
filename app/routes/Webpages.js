@@ -51,21 +51,58 @@ router.post('/', function (req, res, next) {
 
   return res.status(200).json("no");
 
-
-
-
 })
 
 // Find One 
 router.get('/findOne/:id', function (req, res, next) {
   console.log(req.params.id);
 
-  Webpage.findOne({ '_id': req.params.id }).exec(function (err, webpage) {
+  Webpage
+  .findOne({ '_id': req.params.id })
+  .populate({
+    path: 'pertinence',
+    match: { user: req.decoded_id},
+    select: '_id'
+  })
+  .populate('user', 'firstName lastName')
+  .exec(function (err, webpage) {
     if (err) return next(err)
-
     return res.json(webpage)
   })
 })
+
+// Edit User
+router.put('/:id', function (req, res, next) {
+  let webpage = req.body
+  delete webpage._id
+
+  if(webpage.points)
+
+  Webpage.findByIdAndUpdate(req.params.id, webpage, {new: true}, function (err, resp) {
+    if (err) return next(err)
+
+    return res.json(resp)
+  })
+})
+
+router.put('/pertinence/:id', function (req, res, next) {
+  Webpage.findOne({ '_id': req.params.id }).exec(function (err, webpage) {
+   let points = webpage.pertinence.filter(per => {
+      return per.user == req.decoded._id;
+    }) 
+   if(points.length == 0){
+      webpage.pertinence.push({user:req.decoded._id, points:req.body.points})
+    }else{
+      let per = webpage.pertinence.id(points[0]._id);
+      per.points = req.body.points;
+    }
+    webpage.save(); 
+    return "ok"
+  });
+})
+
+
+
 
 
 module.exports = router
