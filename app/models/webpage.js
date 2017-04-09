@@ -18,6 +18,8 @@ var webpageSchema = new mongoose.Schema({
   type: { type: String, required: true, enums: ['Article','Repository','Tutorial','Video'], default: 'Article'},
   status: {type: String, required: true, enum: ['Active', 'ToDefine', 'Outdated', 'Deprecated'], default: 'Active'},
   pertinence: [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, points: Number}],
+  favourite: [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, fav: Boolean}],
+  grade:  [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, status: {type: String, enum: ['Not Seen', 'Seen', 'Red']}}],
   comments: [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, text: String}],
   created_at: { type: Date, default: Date.now },
   updated_at: Date,

@@ -23,16 +23,18 @@ router.post('/', function (req, res, next) {
 
       websiteService.checkWebsite(result.webpage, function (err, website){
         let webpage = webpageService.fillWebpage(result.webpage, result.user)
-        if(website != null)  webpage.website = website._id
-       
-        webpage.save(function (err) {
-          if (err) return next(err)
-          _.forEach(req.io.sockets.connected, function (sock) {
-            if (_.indexOf(sockets[result.user], sock.id) !== -1) {
-              sock.emit('savingWebpage', webpage._id);
-            }
-          })
-        });      
+        
+        website.save(function (err) {
+          if(website != null)  webpage.website = website
+          webpage.save(function (err) {
+            if (err) return next(err)
+            _.forEach(req.io.sockets.connected, function (sock) {
+              if (_.indexOf(sockets[result.user], sock.id) !== -1) {
+                sock.emit('savingWebpage', webpage._id);
+              }
+            })
+          }); 
+        });     
       })
 
         
@@ -64,10 +66,21 @@ router.get('/findOne/:id', function (req, res, next) {
       match: { user: req.decoded_id },
       select: '_id'
     })
+    .populate({
+      path: 'grade',
+      match: { user: req.decoded_id },
+      select: '_id'
+    })
+    .populate({
+      path: 'favourite',
+      match: { user: req.decoded_id },
+      select: '_id'
+    })
     .populate('user', 'firstName lastName')
     .populate('website', 'url')
     .exec(function (err, webpage) {
       if (err) return next(err)
+
       return res.json(webpage)
     })
 })
@@ -96,6 +109,38 @@ router.put('/pertinence/:id', function (req, res, next) {
     } else {
       let per = webpage.pertinence.id(points[0]._id);
       per.points = req.body.points;
+    }
+    webpage.save();
+    return "ok"
+  });
+})
+
+router.put('/grade/:id', function (req, res, next) {
+  Webpage.findOne({ '_id': req.params.id }).exec(function (err, webpage) {
+    let status = webpage.grade.filter(st => {
+      return st.user == req.decoded._id;
+    })
+    if (status.length == 0) {
+      webpage.grade.push({ user: req.decoded._id, status: req.body.grade })
+    } else {
+      let st = webpage.grade.id(status[0]._id);
+      st.status = req.body.grade;
+    }
+    webpage.save();
+    return "ok"
+  });
+})
+
+router.put('/favourite/:id', function (req, res, next) {
+  Webpage.findOne({ '_id': req.params.id }).exec(function (err, webpage) {
+    let fav = webpage.favourite.filter(fv => {
+      return fv.user == req.decoded._id;
+    })
+    if (fav.length == 0) {
+      webpage.favourite.push({ user: req.decoded._id, fav: req.body.favourite })
+    } else {
+      let fv = webpage.favourite.id(fav[0]._id);
+      fv.fav = req.body.favourite;
     }
     webpage.save();
     return "ok"

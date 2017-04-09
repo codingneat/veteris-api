@@ -20,11 +20,6 @@ module.exports = {
                 if (website == null) {
                     website = new Website()
                     website.url = url;
-
-                    website.save(function (err) {
-                        if (err) console.log(err)
-                        return cb(null, website);
-                    });
                 }
                 return cb(null, website);
             })
