@@ -12,6 +12,7 @@ var webpageSchema = new mongoose.Schema({
   theme: {type: mongoose.Schema.Types.ObjectId, ref: 'Theme'},
   category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  website: {type: mongoose.Schema.Types.ObjectId, ref: 'Website'},
   tags: [String],
   isUp : { type: Boolean, default: true },
   type: { type: String, required: true, enums: ['Article','Repository','Tutorial','Video'], default: 'Article'},
