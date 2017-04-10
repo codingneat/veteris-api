@@ -78,6 +78,14 @@ router.get('/findOne/:id', function (req, res, next) {
     })
     .populate('user', 'firstName lastName')
     .populate('website', 'url')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+        select: { 'firstName': 1, 'lastName': 1},
+        model: 'User'
+      }
+    })
     .exec(function (err, webpage) {
       if (err) return next(err)
 
@@ -85,7 +93,7 @@ router.get('/findOne/:id', function (req, res, next) {
     })
 })
 
-// Edit User
+// Edit Webpage
 router.put('/:id', function (req, res, next) {
   let webpage = req.body
   delete webpage._id
@@ -111,7 +119,7 @@ router.put('/pertinence/:id', function (req, res, next) {
       per.points = req.body.points;
     }
     webpage.save();
-    return "ok"
+    return res.json("ok")
   });
 })
 
@@ -126,8 +134,8 @@ router.put('/grade/:id', function (req, res, next) {
       let st = webpage.grade.id(status[0]._id);
       st.status = req.body.grade;
     }
-    webpage.save();
-    return "ok"
+    webpage.save()
+    return res.json("ok")
   });
 })
 
@@ -142,8 +150,32 @@ router.put('/favourite/:id', function (req, res, next) {
       let fv = webpage.favourite.id(fav[0]._id);
       fv.fav = req.body.favourite;
     }
-    webpage.save();
-    return "ok"
+    webpage.save()
+    return res.json("ok")
+  });
+})
+
+router.post('/addcomment/:id', function (req, res, next) {
+  Webpage.findOne({ '_id': req.params.id }).exec(function (err, webpage) {
+    webpage.comments.push({ user: req.decoded._id, text: req.body.comment })
+
+    webpage.populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+        select: { 'firstName': 1, 'lastName': 1},
+        model: 'User'
+      }
+    }).save()
+
+    let comm = webpage.comments.filter(fv => {
+      return fv.text == req.body.comment ;
+    })
+
+    let resp = comm[0].toObject();
+    resp.user = {firstName:req.decoded.firstName, lastName:req.decoded.lastName,_id:req.decoded._id}
+
+    return res.json(resp)
   });
 })
 
