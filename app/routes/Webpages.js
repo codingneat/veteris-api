@@ -179,5 +179,18 @@ router.post('/addcomment/:id', function (req, res, next) {
   });
 })
 
+router.post('/addtag/:id', function (req, res, next) {
+  Webpage.findOne({ '_id': req.params.id }).exec(function (err, webpage) {
+    if(webpage.tags.indexOf(req.body.tag) == -1)
+    {
+      webpage.tags.push(req.body.tag)
+      webpage.save()
+      return res.json(1)
+    }else{
+      return res.json(0)
+    }
+  });
+})
+
 
 module.exports = router
