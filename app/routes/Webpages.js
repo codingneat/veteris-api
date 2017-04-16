@@ -192,5 +192,42 @@ router.post('/addtag/:id', function (req, res, next) {
   });
 })
 
+router.get('/last', function (req, res, next) {
+  Webpage
+    .find()
+    .limit(12)
+    .exec(function (err, webpages) {
+      if (err) return next(err)
+
+      return res.json(webpages)
+    })
+})
+
+router.post('/search', function (req, res, next) {
+  let query = {};
+  if(req.body.hasTheme) query.theme = req.body.theme;
+  if(req.body.hasCategory) query.category = req.body.category;
+
+  if(req.body.hasGrade) query.grade = {$elemMatch: {status: req.body.grade, user: req.decoded._id}};
+  if(req.body.hasPoints) query.pertinence = {$elemMatch: { points: req.body.points, user: req.decoded._id}};
+
+  if(req.body.hasTitle) query.title = { "$regex": req.body.title, "$options": "i" } ;
+  if(req.body.hasAuthor) query.author = { "$regex": req.body.author, "$options": "i" } ;
+
+  if(req.body.hasIsUp && req.body.isUp == "True") query.isUp = true;
+  if(req.body.hasFavourite && req.body.favourite == "True") query.favourite = true;
+
+  if(req.body.tags.length > 0 )query.tags = { $in: req.body.tags };
+
+  console.log(query)
+  console.log(req.body)
+
+  Webpage.find(query).exec(function (err, webpages) {
+    if (err) return next(err)
+
+    return res.json(webpages)
+  }); 
+})
+
 
 module.exports = router
