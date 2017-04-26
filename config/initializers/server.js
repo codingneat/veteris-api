@@ -30,7 +30,6 @@ const start = function (cb) {
 
   require('../socketsBase')(io);
 
-  
 
 
   // Error Handling
