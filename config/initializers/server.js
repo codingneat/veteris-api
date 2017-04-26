@@ -31,7 +31,6 @@ const start = function (cb) {
   require('../socketsBase')(io);
 
 
-
   // Error Handling
   app.use(function (err, req, res, next) {
     console.log(err)
