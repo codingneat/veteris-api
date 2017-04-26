@@ -29,6 +29,7 @@ const start = function (cb) {
   require('../routes/routes')(app)
 
   require('../socketsBase')(io);
+  
 
 
   // Error Handling
