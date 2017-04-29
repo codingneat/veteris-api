@@ -37,7 +37,6 @@ router.post('/', function (req, res, next) {
         });     
       })
 
-        
       }).on('failed attempt', function (errorMessage, doneAttempts) {
     console.log('Job failed');
 
@@ -219,8 +218,6 @@ router.post('/search', function (req, res, next) {
 
   if(req.body.tags.length > 0 )query.tags = { $in: req.body.tags };
 
-  console.log(query)
-  console.log(req.body)
 
   Webpage.find(query).exec(function (err, webpages) {
     if (err) return next(err)

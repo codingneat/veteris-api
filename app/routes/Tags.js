@@ -7,14 +7,7 @@ const Tag 	= require('../models/tag')
 var sockets = require('../../config/initializers/sockets');
 
 // List Tags
-router.get('/', function (req, res, next) {
-  			 var io = req.io;
-
-				_.forEach(io.sockets.connected, function(sock) {
-					if(_.indexOf(sockets[req.decoded._id],sock.id)!==-1){
-						sock.emit('newTweet', 'test');
-					}
-				});     
+router.get('/', function (req, res, next) { 
   Tag.find().select('_id id name').sort({'_id': -1}).exec(function (err, tags) {
     if (err) return next(err)
 
@@ -46,6 +39,14 @@ router.post('/', function (req, res, next) {
 router.put('/:id', function (req, res, next) {
   let tag = req.body
   delete tag._id
+
+  var io = req.io;
+
+  _.forEach(io.sockets.connected, function(sock) {
+    if(_.indexOf(sockets[req.decoded._id],sock.id)!==-1){
+      sock.emit('newTweet', 'test');
+    }
+  });    
 
   Tag.findByIdAndUpdate(req.params.id, tag, {new: true}, function (err, resp) {
     if (err) return next(err)

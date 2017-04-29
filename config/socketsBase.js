@@ -9,6 +9,11 @@ module.exports = function (io) {
     //socket.broadcast.to(socket.id).emit('id_user', {socket:socket.id});
     console.log("Session: " + socket.id);
 
+    if (socket.handshake.query) {
+       if(!sockets[socket.handshake.query.id]) sockets[socket.handshake.query.id] = [];
+      sockets[socket.handshake.query.id].push(socket.id);
+    }
+
     socket.on('message', function (from, msg) {
       console.log("msg")
       return;
