@@ -21,13 +21,13 @@ router.post('/login', function (req, res, next) {
 
 		if (!user||user.estado===0) {
 			mylog('Fallo de autentificación, usuario no encontrado','Autentificación',0,req.body.email);
-			res.json({ success: false, message: 'Falló la autenticación. Las credenciales no corresponden.' });
+			res.status(403).send({ success: false, message: 'Falló la autenticación. Las credenciales no corresponden.' });
 		}else if (user) {
 
 			// check if password matches
 			if (user.password != req.body.password) {
 				mylog('Fallo de autentificación, password no corresponde','Autentificación',0,req.body.email);
-				res.json({ success: false, message: 'Falló la autenticación. Las credenciales no corresponden.' });
+				res.status(403).send({ success: false, message: 'Falló la autenticación. Las credenciales no corresponden.' });
 			}else {
 
 				// if user is found and password is right
