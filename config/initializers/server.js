@@ -7,6 +7,7 @@ const routes = require('require-all')(path.join(__dirname, '/../../app/routes'))
 
 const start = function (cb) {
   const app = express()
+  const prefix = '/veteris-api';
 
   const server = require('http').createServer(app)
   const io     = require('socket.io').listen(server)
@@ -20,13 +21,13 @@ const start = function (cb) {
 
   app.use("/public", express.static(__dirname + '/public'))
 
-  app.use('/auth', routes.Auth)
+  app.use(prefix + '/auth', routes.Auth)
 
   // AUTHenticate route
   require('../auth/auth')(app)
 
   // Go route
-  require('../routes/routes')(app)
+  require('../routes/routes')(app, prefix)
 
   require('../socketsBase')(io);
 

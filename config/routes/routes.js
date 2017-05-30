@@ -3,13 +3,13 @@
 
 var routes = require('require-all')(__dirname + '/../../app/routes')
 
-var start = function (app) {
-  app.use('/heroes', routes.Heroes)
-  app.use('/users', routes.Users)
-  app.use('/themes', routes.Themes)
-  app.use('/categories', routes.Categories)
-  app.use('/tags', routes.Tags)
-  app.use('/webpages', routes.Webpages)
+var start = function (app, prefix) {
+  app.use(prefix + '/heroes', routes.Heroes)
+  app.use(prefix + '/users', routes.Users)
+  app.use(prefix + '/themes', routes.Themes)
+  app.use(prefix + '/categories', routes.Categories)
+  app.use(prefix + '/tags', routes.Tags)
+  app.use(prefix + '/webpages', routes.Webpages)
 }
 
 module.exports = start
