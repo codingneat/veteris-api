@@ -4,7 +4,7 @@ const _ = require('lodash')
 
 module.exports = function (io) {
 
-  io.of('/veteris-api').on('connection', function (socket) {
+  io.on('connection', function (socket) {
     //socket.broadcast.emit('user connected');
     //socket.broadcast.to(socket.id).emit('id_user', {socket:socket.id});
     console.log("Session: " + socket.id);
