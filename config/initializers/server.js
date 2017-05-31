@@ -10,7 +10,7 @@ const start = function (cb) {
   const prefix = '/veteris-api';
 
   const server = require('http').createServer(app)
-  const io     = require('socket.io').listen(server)
+  const io     = require('socket.io').listen(server, {path: '/veteris-api/socket.io'})
 
   require('./express')(app)
 

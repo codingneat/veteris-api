@@ -4,7 +4,7 @@ const _ = require('lodash')
 
 module.exports = function (io) {
 
-  io.on('connection', function (socket) {
+  io.of('/veteris-api').on('connection', function (socket) {
     //socket.broadcast.emit('user connected');
     //socket.broadcast.to(socket.id).emit('id_user', {socket:socket.id});
     console.log("Session: " + socket.id);
@@ -13,6 +13,8 @@ module.exports = function (io) {
        if(!sockets[socket.handshake.query.id]) sockets[socket.handshake.query.id] = [];
       sockets[socket.handshake.query.id].push(socket.id);
     }
+
+    socket.emit('news', "ddddsdfsdf");
 
     socket.on('message', function (from, msg) {
       console.log("msg")

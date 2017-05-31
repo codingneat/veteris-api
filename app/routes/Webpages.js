@@ -29,7 +29,7 @@ router.post('/', function (req, res, next) {
           webpage.save(function (err) {
             if (err) return next(err)
             _.forEach(req.io.sockets.connected, function (sock) {
-              if (_.indexOf(sockets[result.user], sock.id) !== -1) {
+              if (_.indexOf(sockets[result.user], '/veteris-api#'+ sock.id) !== -1) {
                 sock.emit('savingWebpage', webpage._id);
               }
             })
