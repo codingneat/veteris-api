@@ -8,6 +8,8 @@
 /node_modules
 /veteris-queue/node_modules
 
+/config/certs/*
+
 # IDEs and editors
 /.idea
 .project

@@ -4,11 +4,21 @@
 const express = require('express')
 const path = require('path')
 const routes = require('require-all')(path.join(__dirname, '/../../app/routes'))
+const fs = require('fs');
+
+const hskey = fs.readFileSync('./config/certs/privatekey.pem');
+const hscert = fs.readFileSync('./config/certs/certificate.pem')
+
 
 const start = function (cb) {
   const app = express()
 
-  const server = require('http').createServer(app)
+  const options = {
+      key: hskey,
+      cert: hscert
+  };
+
+  const server = require('https').createServer(options, app)
   const io     = require('socket.io').listen(server)
 
   require('./express')(app)
