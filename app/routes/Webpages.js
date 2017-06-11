@@ -12,6 +12,7 @@ const sockets = require('../../config/initializers/sockets');
 
 // Create 
 router.post('/', function (req, res, next) {
+  console.log(req.body);
 
   if (req.body.name !== "undefined") {
     var job = queue.create('addWebpage', {
