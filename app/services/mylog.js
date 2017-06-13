@@ -1,4 +1,4 @@
-var winston = require('winston');
+var winston = require('winston')
 
 module.exports = function (tipo,clase,id,user) {
 
