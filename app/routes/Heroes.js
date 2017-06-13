@@ -5,12 +5,12 @@ const router	= express.Router()
 const _ = require('lodash')
 const Hero 	= require('../models/hero')
 var extractor = require('unfluff')
-var MetaInspector = require('node-metainspector');
-var webshot = require('webshot');
-var parseDomain = require('parse-domain');
-var scrape = require('website-scraper');
-var request = require('request');
-var textract = require('textract');
+var MetaInspector = require('node-metainspector')
+var webshot = require('webshot')
+var parseDomain = require('parse-domain')
+var scrape = require('website-scraper')
+var request = require('request')
+var textract = require('textract')
 
 // List Heroes
 router.get('/', function (req, res, next) {
