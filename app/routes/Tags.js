@@ -4,7 +4,7 @@ const express	= require('express')
 const router	= express.Router()
 const _ = require('lodash')
 const Tag 	= require('../models/tag')
-var sockets = require('../../config/initializers/sockets');
+var sockets = require('../../config/initializers/sockets')
 
 // List Tags
 router.get('/', function (req, res, next) { 

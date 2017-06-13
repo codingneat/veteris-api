@@ -8,7 +8,7 @@ const webpageService = require('../services/webpage')
 const websiteService = require('../services/website')
 const kue = require('kue')
 const queue = kue.createQueue()
-const sockets = require('../../config/initializers/sockets');
+const sockets = require('../../config/initializers/sockets')
 
 // Create 
 router.post('/', function (req, res, next) {
