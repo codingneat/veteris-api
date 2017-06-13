@@ -44,6 +44,10 @@ router.post('/login', function (req, res, next) {
 router.post('/token', function (req, res, next) {
 	const token = req.body.token;
 
+	console.log(token, "------------body");
+
+	console.log(token, "------------token");
+
 	if (token) {
 		jwt.verify(token, config.secret, function (err, decoded) {
 			if (err) {
